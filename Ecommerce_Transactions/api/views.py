@@ -6,18 +6,27 @@ from .serializers import CustomerSerializer, ProductSerializer, TransactionSeria
 
 class CustomerListView(APIView):
     def get(self, request):
-        customers = Customer.objects.all()
-        serializer = CustomerSerializer(customers, many=True)
-        return Response(serializer.data)
+        query = "SELECT * FROM `savvy-cinema-444321-g4.dsd_project_data.customer` LIMIT 10"
+        data = run_query(query)
+        if data:
+            return Response(data)
+        else:
+            return Response({"error": "Failed to fetch customer data"}, status=500)
 
 class ProductListView(APIView):
     def get(self, request):
-        products = Product.objects.all()
-        serializer = ProductSerializer(products, many=True)
-        return Response(serializer.data)
+        query = "SELECT * FROM `savvy-cinema-444321-g4.dsd_project_data.product` LIMIT 10"
+        data = run_query(query)
+        if data:
+            return Response(data)
+        else:
+            return Response({"error": "Failed to fetch product data"}, status=500)
 
 class TransactionListView(APIView):
     def get(self, request):
-        transactions = Transaction.objects.all()
-        serializer = TransactionSerializer(transactions, many=True)
-        return Response(serializer.data)
+        query = "SELECT * FROM `savvy-cinema-444321-g4.dsd_project_data.transaction` LIMIT 10"
+        data = run_query(query)
+        if data:
+            return Response(data)
+        else:
+            return Response({"error": "Failed to fetch transaction data"}, status=500)
