@@ -17,10 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from api.views import CustomerListView, ProductListView, TransactionListView
+from django.http import HttpResponseRedirect
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/customers/', CustomerListView.as_view(), name='customer-list'),
     path('api/products/', ProductListView.as_view(), name='product-list'),
     path('api/transactions/', TransactionListView.as_view(), name='transaction-list'),
+    path('', lambda request: HttpResponseRedirect('/api/customers/')),
 ]
