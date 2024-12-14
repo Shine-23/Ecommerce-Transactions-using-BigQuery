@@ -1,39 +1,40 @@
 from flask import Flask, render_template, jsonify
-from google.cloud import bigquery
 
 app = Flask(__name__)
 
-# BigQuery Client Setup
-client = bigquery.Client()
+# Mock data for system metrics (replace with real queries if available)
+def get_mock_data():
+    return {
+        "scalability": {"active_nodes": 5, "total_requests": 1200},
+        "fault_tolerance": {"failed_nodes": 1, "recovered_nodes": 3},
+        "security": {"secure_requests": 1400, "total_requests": 1500},
+        "load_balancing": {"server_1": 300, "server_2": 500, "server_3": 200},
+    }
 
-# Fetch some sample data from BigQuery (e.g., Customer count)
-def get_customer_count():
-    query = "SELECT COUNT(customer_id) as customer_count FROM `your_dataset.Customer`"
-    query_job = client.query(query)
-    result = query_job.result()
-    for row in result:
-        return row.customer_count
-
-# Routes
 @app.route('/')
 def dashboard():
     return render_template('dashboard.html')
 
+@app.route('/scalability')
+def scalability():
+    return render_template('scalability.html')
+
+@app.route('/fault-tolerance')
+def fault_tolerance():
+    return render_template('fault_tolerance.html')
+
+@app.route('/security')
+def security():
+    return render_template('security.html')
+
+@app.route('/load-balancing')
+def load_balancing():
+    return render_template('load_balancing.html')
+
 @app.route('/api/system_metrics')
 def system_metrics():
-    # Mock Data for Dashboard Metrics
-    data = {
-        "scalability": {"active_nodes": 5, "total_requests": 1200},
-        "fault_tolerance": {"failed_nodes": 1, "recovered_nodes": 3},
-        "security": {"total_requests": 1500, "secure_requests": 1400},
-        "load_balancing": {"server_1": 300, "server_2": 500, "server_3": 200},
-    }
+    data = get_mock_data()
     return jsonify(data)
 
-@app.route('/api/customer_count')
-def customer_count():
-    count = get_customer_count()
-    return jsonify({"customer_count": count})
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(debug=True)

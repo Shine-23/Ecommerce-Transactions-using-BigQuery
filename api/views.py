@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from .bigquery_client import run_query
+from api.bigquery_client import run_query
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Customer, Product, Transaction
