@@ -1,9 +1,6 @@
 from rest_framework.views import APIView
 from api.bigquery_client import run_query
 from rest_framework.response import Response
-from rest_framework import status
-from .models import Customer, Product, Transaction
-from .serializers import CustomerSerializer, ProductSerializer, TransactionSerializer
 
 class CustomerListView(APIView):
     def get(self, request):
