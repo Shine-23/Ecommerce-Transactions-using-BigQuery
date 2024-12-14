@@ -31,3 +31,12 @@ class TransactionListView(APIView):
             return Response(data)
         else:
             return Response({"error": "Failed to fetch transaction data"}, status=500)
+        
+class ClickStreamListView(APIView):
+    def get(self, request):
+        query = "SELECT * FROM `dsd-proj-444318.ecommerce_dataset.Click_Stream` LIMIT 10"
+        data = run_query(query)
+        if data:
+            return Response(data)
+        else:
+            return Response({"error": "Failed to fetch transaction data"}, status=500)
