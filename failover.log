@@ -1,0 +1,49 @@
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET /customers/ HTTP/1.1" 200 48840
+"GET /customers/ HTTP/1.1" 200 48840
+"GET /customers/ HTTP/1.1" 200 48840
+"GET /products/ HTTP/1.1" 200 23593
+"GET /transactions/ HTTP/1.1" 200 54970
+"GET /clickStream/ HTTP/1.1" 200 21301
+Not Found: /simulate-failure/
+"GET /simulate-failure/ HTTP/1.1" 404 3243
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Not Found: /simulate-failure/
+"GET /simulate-failure/ HTTP/1.1" 404 3243
+Not Found: /simulate-failure/
+"GET /simulate-failure/ HTTP/1.1" 404 3243
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\priya\Desktop\Ecommerce-Transaction-using- BigQuery\backend\urls.py changed, reloading.
+C:\Users\priya\Desktop\Ecommerce-Transaction-using- BigQuery\backend\urls.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\priya\Desktop\Ecommerce-Transaction-using- BigQuery\backend\urls.py changed, reloading.
+C:\Users\priya\Desktop\Ecommerce-Transaction-using- BigQuery\backend\urls.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET /simulateFailure/ HTTP/1.1" 200 54
+"GET /simulateFailure/ HTTP/1.1" 200 54
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET /simulateFailure/ HTTP/1.1" 200 54
+C:\Users\priya\Desktop\Ecommerce-Transaction-using- BigQuery\api\views.py changed, reloading.
+C:\Users\priya\Desktop\Ecommerce-Transaction-using- BigQuery\api\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET /customers/ HTTP/1.1" 200 48840
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET /customers/ HTTP/1.1" 200 48840
+Watching for file changes with StatReloader
+"GET /customers/ HTTP/1.1" 200 48840
+"GET /customers/ HTTP/1.1" 200 48840
+"GET /customers/ HTTP/1.1" 200 48840
+"GET /products/ HTTP/1.1" 200 23593
