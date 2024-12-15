@@ -1,14 +1,14 @@
 from rest_framework.views import APIView
 from api.bigquery_client import query_with_retry
-from backend.fault_tolerance_metrics import get_metrics
+from .metrics import log_request, set_primary_status, get_metrics
 from rest_framework.response import Response
 
 import os
 from django.http import JsonResponse
 
-
 class CustomerListView(APIView):
     def get(self, request):
+        log_request("primary")  # Log the request
         query = "SELECT * FROM `dsd-proj-444318.ecommerce_dataset.Customer` LIMIT 100"
         data = query_with_retry(query)
         if data:
@@ -18,6 +18,7 @@ class CustomerListView(APIView):
 
 class ProductListView(APIView):
     def get(self, request):
+        log_request("primary")  # Log the request
         query = "SELECT * FROM `dsd-proj-444318.ecommerce_dataset.Product` LIMIT 100"
         data = query_with_retry(query)
         if data:
@@ -27,6 +28,7 @@ class ProductListView(APIView):
 
 class TransactionListView(APIView):
     def get(self, request):
+        log_request("primary")  # Log the request
         query = "SELECT * FROM `dsd-proj-444318.ecommerce_dataset.Transactions` LIMIT 100"
         data = query_with_retry(query)
         if data:
@@ -36,6 +38,7 @@ class TransactionListView(APIView):
         
 class ClickStreamListView(APIView):
     def get(self, request):
+        log_request("primary")  # Log the request
         query = "SELECT * FROM `dsd-proj-444318.ecommerce_dataset.Click_Stream` LIMIT 100"
         data = query_with_retry(query)
         if data:
@@ -60,3 +63,10 @@ def shutdown_service(request):
 
 def metrics_view(request):
     return JsonResponse(get_metrics())
+
+def log_request_view(request):
+    request_type = request.GET.get("type", None)
+    if request_type:
+        log_request(request_type)
+        return JsonResponse({"message": f"{request_type} request logged successfully."})
+    return JsonResponse({"error": "Request type not specified."}, status=400)
