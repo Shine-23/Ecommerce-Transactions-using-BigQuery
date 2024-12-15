@@ -8,16 +8,18 @@ BACKENDS = [
     "http://127.0.0.1:8000",  # Primary backend
     "http://127.0.0.1:8001"   # Backup backend
 ]
-
-# Function to fetch data with failover
 def fetch_data_with_failover(endpoint):
     for service in BACKENDS:
         try:
-            response = requests.get(f"{service}{endpoint}")
+            print(f"Attempting to connect to {service}{endpoint}...")  # Debugging info
+            response = requests.get(f"{service}{endpoint}", timeout=5)  # Add timeout
             if response.status_code == 200:
+                print(f"Response received from {service}")
                 return response.json()
         except requests.exceptions.RequestException as e:
             print(f"Error connecting to {service}: {e}")
+            continue  # Try the next backend
+    print("All services failed.")
     return {"error": "All services are unavailable. Please try again later."}
 
 # Routes
@@ -47,8 +49,36 @@ def clickstream():
 
 @app.route('/simulateFailure')
 def simulate_failure():
-    response = requests.get(f"{BACKENDS[0]}/simulateFailure/")
-    return jsonify({"message": "Backend failure simulated"}) if response.status_code == 200 else jsonify({"error": "Failed to simulate failure"})
+    print("Simulating failure for primary backend...")
+    try:
+        response = requests.get(f"{BACKENDS[0]}/simulateFailure/")  # Stop primary backend
+        if response.status_code == 200:
+            print("Primary backend stopped. Testing backup...")
+            return jsonify({"message": "Primary backend stopped. Backup is being used."})
+        else:
+            return jsonify({"error": "Failed to simulate primary failure."})
+    except requests.exceptions.RequestException as e:
+        print(f"Primary backend is down. Testing backup: {e}")
+        # Test the backup backend
+        backup_response = fetch_data_with_failover("/metrics")  # Use metrics to check the backup
+        if "error" not in backup_response:
+            return jsonify({"message": "Backup service is active and functional."})
+        return jsonify({"error": "Both services are unavailable. Failover failed."})
+
+
+@app.route('/metrics')
+def metrics():
+    data = fetch_data_with_failover("/metrics/")
+    return jsonify(data)
+
+@app.route('/visualization/service-status')
+def service_status():
+    return render_template('service_status.html')
+
+@app.route('/visualization/request-distribution')
+def request_distribution():
+    return render_template('request_distribution.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
