@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from api.bigquery_client import query_with_retry
+from backend.fault_tolerance_metrics import get_metrics
 from rest_framework.response import Response
 
 import os
@@ -41,6 +42,7 @@ class ClickStreamListView(APIView):
             return Response(data)
         else:
             return Response({"error": "Failed to fetch transaction data"}, status=500)
+        
 def shutdown_service(request):
     try:
         # Find the process using port 8000
@@ -55,3 +57,6 @@ def shutdown_service(request):
         return JsonResponse({"error": "No service found on port 8000"}, status=404)
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
+
+def metrics_view(request):
+    return JsonResponse(get_metrics())
