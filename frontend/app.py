@@ -11,16 +11,21 @@ BACKENDS = [
 def fetch_data_with_failover(endpoint):
     for service in BACKENDS:
         try:
-            print(f"Attempting to connect to {service}{endpoint}...")  # Debugging info
+            print(f"Attempting to connect to {service}{endpoint}...")
             response = requests.get(f"{service}{endpoint}", timeout=5)  # Add timeout
             if response.status_code == 200:
-                print(f"Response received from {service}")
+                # Notify the backend to log request type
+                if "8000" in service:
+                    requests.get(f"{service}/log-request?type=primary")
+                elif "8001" in service:
+                    requests.get(f"{service}/log-request?type=backup")
                 return response.json()
         except requests.exceptions.RequestException as e:
             print(f"Error connecting to {service}: {e}")
-            continue  # Try the next backend
+            continue
     print("All services failed.")
     return {"error": "All services are unavailable. Please try again later."}
+
 
 # Routes
 @app.route('/')
@@ -65,19 +70,14 @@ def simulate_failure():
             return jsonify({"message": "Backup service is active and functional."})
         return jsonify({"error": "Both services are unavailable. Failover failed."})
 
-
 @app.route('/metrics')
 def metrics():
     data = fetch_data_with_failover("/metrics/")
     return jsonify(data)
 
-@app.route('/visualization/service-status')
-def service_status():
-    return render_template('service_status.html')
-
-@app.route('/visualization/request-distribution')
-def request_distribution():
-    return render_template('request_distribution.html')
+@app.route('/metrics-dashboard')
+def metrics_dashboard():
+    return render_template('metrics.html')
 
 
 if __name__ == '__main__':
