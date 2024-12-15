@@ -5,17 +5,41 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container mt-5">
-        <h1>Distributed System and Design Project</h1>
-        <p>This project demonstrates distributed features like Fault Tolerance, Scalability, and Load Balancing.</p>
-        <div class="mt-3">
-            <a href="/customers" class="btn btn-primary">View Customers</a>
-            <a href="/products" class="btn btn-primary">View Products</a>
-            <a href="/transactions" class="btn btn-primary">View Transactions</a>
-            <a href="/clickstream" class="btn btn-primary">View Click Stream</a>
-        </div>        
-        <button onclick="simulateFailure()" class="btn btn-danger">Simulate Backend Failure</button>
-    </div>
+    <div class="container">
+        <header class="text-center py-4">
+            <h1>Distributed System Dashboard</h1>
+            <p class="lead">Explore the 4 Distributed System Features</p>
+        </header>
+
+        <main>
+            <section id="features" class="mt-5 text-center">
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-3">
+                        <a href="/customers"  class="btn btn-primary btn-lg w-100 py-4">Get Customers</a>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <a href="/products" class="btn btn-danger btn-lg w-100 py-4">Get Products</a>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <a href="/transactions" class="btn btn-success btn-lg w-100 py-4">Get Transactions</a>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <a href="/clickstream" class="btn btn-warning btn-lg w-100 py-4">Get Click Stream</a>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <button onclick="simulateFailure()" class="btn btn-dark">Simulate Server Failure</button>
+                    <button onclick="" class="btn btn-dark">Simulate 1000 Users</button>
+                    <button onclick="" class="btn btn-dark">Simulate</button>
+                    <button onclick="" class="btn btn-dark">Simulate</button>
+                </div>            
+            </section>
+        </main>
+        
+        <footer class="text-center mt-5">
+            <p>Developed with ❤️ for Distributed Systems.</p>
+        </footer>
+    </div>     
     <script>
         function simulateFailure() {
             fetch('/simulateFailure')
