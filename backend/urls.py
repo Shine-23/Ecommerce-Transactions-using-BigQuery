@@ -16,7 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from api.views import CustomerListView, ProductListView, TransactionListView, ClickStreamListView, shutdown_service, metrics_view, log_request_view
+from api.views import CustomerListView, ProductListView, TransactionListView, ClickStreamListView, shutdown_service, metrics_view, log_request_view, secure_data
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from django.http import HttpResponseRedirect
 
@@ -29,5 +30,8 @@ urlpatterns = [
     path('simulateFailure/', shutdown_service, name='simulate-failure'),
     path('metrics/', metrics_view, name='metrics'),
     path('log-request/', log_request_view, name='log-request'),
+    path('secure-data/', secure_data, name='secure-data'),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
 
