@@ -2,19 +2,27 @@ from rest_framework.views import APIView
 from api.bigquery_client import query_with_retry
 from .metrics import log_request, set_primary_status, get_metrics
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 
 import os
 from django.http import JsonResponse
 
+
 class CustomerListView(APIView):
+    permission_classes = [IsAuthenticated]  # Require authentication
+
     def get(self, request):
-        log_request("primary")  # Log the request
+        if not request.user.is_staff:  # Only admins can access
+            return JsonResponse({"error": "Access denied. Admins only."}, status=403)
+
+        # Fetch customer data as usual
+        log_request("primary")
         query = "SELECT * FROM `dsd-proj-444318.ecommerce_dataset.Customer` LIMIT 100"
         data = query_with_retry(query)
         if data:
-            return Response(data)
-        else:
-            return Response({"error": "Failed to fetch customer data"}, status=500)
+            return JsonResponse(data, safe=False)
+        return JsonResponse({"error": "Failed to fetch customer data"}, status=500)
 
 class ProductListView(APIView):
     def get(self, request):
@@ -35,7 +43,7 @@ class TransactionListView(APIView):
             return Response(data)
         else:
             return Response({"error": "Failed to fetch transaction data"}, status=500)
-        
+
 class ClickStreamListView(APIView):
     def get(self, request):
         log_request("primary")  # Log the request
@@ -70,3 +78,10 @@ def log_request_view(request):
         log_request(request_type)
         return JsonResponse({"message": f"{request_type} request logged successfully."})
     return JsonResponse({"error": "Request type not specified."}, status=400)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def secure_data(request):
+    if request.user.is_staff:  # Check if the user is an admin
+        return JsonResponse({"data": "This is secure admin data."})
+    return JsonResponse({"error": "Access denied. Admins only."}, status=403)
