@@ -16,11 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from api.views import CustomerListView, ProductListView, TransactionListView, ClickStreamListView, shutdown_service
+from api.views import CustomerListView, ProductListView, TransactionListView, ClickStreamListView, shutdown_service, metrics_view, log_request_view
 
 from django.http import HttpResponseRedirect
-
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,6 +27,7 @@ urlpatterns = [
     path('transactions/', TransactionListView.as_view(), name='transaction'),
     path('clickStream/', ClickStreamListView.as_view(), name='clickStream'),
     path('simulateFailure/', shutdown_service, name='simulate-failure'),
-    path('', lambda request: HttpResponseRedirect('/customers/')),
+    path('metrics/', metrics_view, name='metrics'),
+    path('log-request/', log_request_view, name='log-request'),
 ]
 
